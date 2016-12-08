@@ -10,7 +10,7 @@ class HelloWorldTest : FunSpec() {
     init {
         test("the GraphQL hello world test, with builder extension functions") {
             val queryType = newObject("helloWorldQuery")
-                    .field("hello"..GraphQLString withStaticValue "world")
+                    .field("hello"..GraphQLString staticValue "world")
 
             val schema = newGraphQLSchema(query = queryType)
             val result = newGraphQL(schema).execute("{hello}").data as Map<String, Any>

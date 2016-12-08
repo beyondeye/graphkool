@@ -57,7 +57,7 @@ with GraphKool can be written:
 ```kotlin
 fun main() {
             val queryType = newObject("helloWorldQuery")
-                    .field("hello"..GraphQLString withStaticValue "world")
+                    .field("hello"..GraphQLString staticValue "world")
 
             val schema = newGraphQLSchema(query = queryType)
             val result = newGraphQL(schema).execute("{hello}").data as Map<String, Any>
