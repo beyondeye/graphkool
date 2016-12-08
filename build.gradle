@@ -57,9 +57,15 @@ configure(subprojects.findAll{it.name =='graphkool-core' }) {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-//        testCompile "junit:junit:$junit_version"
-		testCompile 'io.kotlintest:kotlintest:1.3.5'
 //        testCompile 'org.assertj:assertj-core:1.7.1'
+        compile "io.vertx:vertx-core:$vertx_version"
+        compileOnly "io.vertx:vertx-docgen:$vertx_version"
+
+        testCompile "junit:junit:$junit_version"
+        testCompile 'io.kotlintest:kotlintest:1.3.5'
+        testCompile 'org.awaitility:awaitility:2.0.0'
+        testCompile "io.vertx:vertx-unit:$vertx_version"
+
     }
     //Test Logging
     tasks.withType(Test) {
