@@ -27,9 +27,44 @@ compile 'com.github.beyondeye.graphkool:graphkool-core:0.1.0'
 
 <a name="graphkool_intro"></a>
 # An introduction to GraphKool
-Reduks (similarly to Reduxjs) is basically a simplified Reactive Functional Programming approach for implementing UI for Android
+A collection of extension functions and utility around [GraphQL-java](https://github.com/graphql-java/graphql-java ) for reducing its
+verbosity:
+The original GraphQL hello world example written with GraphQL-java:
 
-A very good source of material for understanding redux/reduks are [the official reduxjs docs](http://redux.js.org/), but I will try to describe here the main principles, and how they blend with Android and Kotlin
+```java
+public class HelloWorld {
+
+    public static void main(String[] args) {    
+        GraphQLObjectType queryType = newObject()
+                        .name("helloWorldQuery")
+                        .field(newFieldDefinition()
+                                .type(GraphQLString)
+                                .name("hello")
+                                .staticValue("world"))
+                        .build();
+        
+        GraphQLSchema schema = GraphQLSchema.newSchema()
+                        .query(queryType)
+                        .build();
+        Map<String, Object> result = (Map<String, Object>) new GraphQL(schema).execute("{hello}").getData();
+
+        System.out.println(result);
+        // Prints: {hello=world}
+    }
+}
+```
+with GraphKool can be written:
+```kotlin
+fun main() {
+            val queryType = newObject("helloWorldQuery")
+                    .field("hello"..GraphQLString withStaticValue "world")
+
+            val schema = newGraphQLSchema(query = queryType)
+            val result = newGraphQL(schema).execute("{hello}").data as Map<String, Any>
+            println(result)
+}
+```
+**Kool!!**
 
 <a name="opensource"></a>
 ## Open source library included/modified or that inspired GraphKool
