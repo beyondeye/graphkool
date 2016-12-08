@@ -1,0 +1,8 @@
+dependencies {
+	compile "com.graphql-java:graphql-java:$graphqljava_version"
+	//    compile "com.graphql-java:graphql-java-annotations:0.13.1"
+
+}
+
+apply from: '../maven-push-javalib.gradle'
+
