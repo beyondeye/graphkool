@@ -27,7 +27,7 @@ compile 'com.github.beyondeye.graphkool:graphkool-core:0.1.0'
 
 <a name="graphkool_intro"></a>
 # An introduction to GraphKool
-A collection of extension functions and utility around [GraphQL-java](https://github.com/graphql-java/graphql-java ) for reducing its
+A collection of Kotlin extension functions and utilities around [GraphQL-java](https://github.com/graphql-java/graphql-java ) for reducing its
 verbosity:
 The original GraphQL hello world example written with GraphQL-java:
 
