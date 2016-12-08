@@ -1,34 +1,34 @@
-package com.beyondeye.graphkool;
+package com.beyondeye.graphkool
 
 
-import graphql.schema.*;
+import graphql.schema.*
 
-import static graphql.Scalars.GraphQLString;
-import static graphql.schema.GraphQLArgument.newArgument;
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLInterfaceType.newInterface;
-import static graphql.schema.GraphQLObjectType.newObject;
+import graphql.Scalars.GraphQLString
+import graphql.schema.GraphQLArgument.newArgument
+import graphql.schema.GraphQLEnumType.newEnum
+import graphql.schema.GraphQLFieldDefinition.newFieldDefinition
+import graphql.schema.GraphQLInterfaceType.newInterface
+import graphql.schema.GraphQLObjectType.newObject
 
-public class StarWarsSchema {
+object StarWarsSchema {
 
 
-    public static GraphQLEnumType episodeEnum = newEnum()
+    var episodeEnum = newEnum()
             .name("Episode")
             .description("One of the films in the Star Wars Trilogy")
             .value("NEWHOPE", 4, "Released in 1977.")
             .value("EMPIRE", 5, "Released in 1980.")
             .value("JEDI", 6, "Released in 1983.")
-            .build();
+            .build()
 
 
-    public static GraphQLInterfaceType characterInterface = newInterface()
+    var characterInterface:GraphQLInterfaceType = newInterface()
             .name("Character")
             .description("A character in the Star Wars Trilogy")
             .field(newFieldDefinition()
                     .name("id")
                     .description("The id of the character.")
-                    .type(new GraphQLNonNull(GraphQLString)))
+                    .type(GraphQLNonNull(GraphQLString)))
             .field(newFieldDefinition()
                     .name("name")
                     .description("The name of the character.")
@@ -36,22 +36,22 @@ public class StarWarsSchema {
             .field(newFieldDefinition()
                     .name("friends")
                     .description("The friends of the character, or an empty list if they have none.")
-                    .type(new GraphQLList(new GraphQLTypeReference("Character"))))
+                    .type(GraphQLList(GraphQLTypeReference("Character"))))
             .field(newFieldDefinition()
                     .name("appearsIn")
                     .description("Which movies they appear in.")
-                    .type(new GraphQLList(episodeEnum)))
-            .typeResolver(StarWarsData.getCharacterTypeResolver())
-            .build();
+                    .type(GraphQLList(episodeEnum)))
+            .typeResolver(StarWarsData.characterTypeResolver)
+            .build()
 
-    public static GraphQLObjectType humanType = newObject()
+    var humanType = newObject()
             .name("Human")
             .description("A humanoid creature in the Star Wars universe.")
             .withInterface(characterInterface)
             .field(newFieldDefinition()
                     .name("id")
                     .description("The id of the human.")
-                    .type(new GraphQLNonNull(GraphQLString)))
+                    .type(GraphQLNonNull(GraphQLString)))
             .field(newFieldDefinition()
                     .name("name")
                     .description("The name of the human.")
@@ -59,26 +59,26 @@ public class StarWarsSchema {
             .field(newFieldDefinition()
                     .name("friends")
                     .description("The friends of the human, or an empty list if they have none.")
-                    .type(new GraphQLList(characterInterface))
-                    .dataFetcher(StarWarsData.getFriendsDataFetcher()))
+                    .type(GraphQLList(characterInterface))
+                    .dataFetcher(StarWarsData.friendsDataFetcher))
             .field(newFieldDefinition()
                     .name("appearsIn")
                     .description("Which movies they appear in.")
-                    .type(new GraphQLList(episodeEnum)))
+                    .type(GraphQLList(episodeEnum)))
             .field(newFieldDefinition()
                     .name("homePlanet")
                     .description("The home planet of the human, or null if unknown.")
                     .type(GraphQLString))
-            .build();
+            .build()
 
-    public static GraphQLObjectType droidType = newObject()
+    var droidType = newObject()
             .name("Droid")
             .description("A mechanical creature in the Star Wars universe.")
             .withInterface(characterInterface)
             .field(newFieldDefinition()
                     .name("id")
                     .description("The id of the droid.")
-                    .type(new GraphQLNonNull(GraphQLString)))
+                    .type(GraphQLNonNull(GraphQLString)))
             .field(newFieldDefinition()
                     .name("name")
                     .description("The name of the droid.")
@@ -86,20 +86,20 @@ public class StarWarsSchema {
             .field(newFieldDefinition()
                     .name("friends")
                     .description("The friends of the droid, or an empty list if they have none.")
-                    .type(new GraphQLList(characterInterface))
-                    .dataFetcher(StarWarsData.getFriendsDataFetcher()))
+                    .type(GraphQLList(characterInterface))
+                    .dataFetcher(StarWarsData.friendsDataFetcher))
             .field(newFieldDefinition()
                     .name("appearsIn")
                     .description("Which movies they appear in.")
-                    .type(new GraphQLList(episodeEnum)))
+                    .type(GraphQLList(episodeEnum)))
             .field(newFieldDefinition()
                     .name("primaryFunction")
                     .description("The primary function of the droid.")
                     .type(GraphQLString))
-            .build();
+            .build()
 
 
-    public static GraphQLObjectType queryType = newObject()
+    var queryType = newObject()
             .name("QueryType")
             .field(newFieldDefinition()
                     .name("hero")
@@ -108,27 +108,27 @@ public class StarWarsSchema {
                             .name("episode")
                             .description("If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.")
                             .type(episodeEnum))
-                    .dataFetcher(new StaticDataFetcher(StarWarsData.getArtoo())))
+                    .dataFetcher(StaticDataFetcher(StarWarsData.artoo)))
             .field(newFieldDefinition()
                     .name("human")
                     .type(humanType)
                     .argument(newArgument()
                             .name("id")
                             .description("id of the human")
-                            .type(new GraphQLNonNull(GraphQLString)))
-                    .dataFetcher(StarWarsData.getHumanDataFetcher()))
+                            .type(GraphQLNonNull(GraphQLString)))
+                    .dataFetcher(StarWarsData.humanDataFetcher))
             .field(newFieldDefinition()
                     .name("droid")
                     .type(droidType)
                     .argument(newArgument()
                             .name("id")
                             .description("id of the droid")
-                            .type(new GraphQLNonNull(GraphQLString)))
-                    .dataFetcher(StarWarsData.getDroidDataFetcher()))
-            .build();
+                            .type(GraphQLNonNull(GraphQLString)))
+                    .dataFetcher(StarWarsData.droidDataFetcher))
+            .build()
 
 
-    public static GraphQLSchema starWarsSchema = GraphQLSchema.newSchema()
+    var starWarsSchema = GraphQLSchema.newSchema()
             .query(queryType)
-            .build();
+            .build()
 }
