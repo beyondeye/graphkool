@@ -24,9 +24,43 @@ infix fun GraphQLFieldDefinition.Builder.staticValue(value:Any) = this.staticVal
 infix fun GraphQLFieldDefinition.Builder.description(d:String) = this.description(d)
 infix fun GraphQLFieldDefinition.Builder.dataFetcher(fetcher:DataFetcher) = this.dataFetcher(fetcher)
 
-infix fun GraphQLFieldDefinition.Builder.argument(builder: GraphQLArgument.Builder) = this.argument(builder)
 
 fun newGraphQLSchema( query: GraphQLObjectType.Builder)= GraphQLSchema.newSchema().query(query)
 
 fun listOfRefs(typeName:String)=GraphQLList(GraphQLTypeReference(typeName))
 fun listOfObjs(wrappedType: GraphQLType) = GraphQLList(wrappedType)
+
+infix fun GraphQLFieldDefinition.Builder.argument(builder: GraphQLArgument.Builder) = this.argument(builder)
+infix fun GraphQLFieldDefinition.Builder.argument(newa: GQLArgumentBuilder) = this.argument(newa.build())
+
+operator fun  String.unaryPlus()= GQLArgumentBuilder(this)
+operator fun GQLArgumentBuilder.rangeTo(type_: GraphQLInputType) = this.type(type_)
+
+class GQLArgumentBuilder(val name:String) {
+
+    private var type: GraphQLInputType? = null
+    private var defaultValue: Any? = null
+    private var description: String? = null
+
+
+    infix fun description(description: String): GQLArgumentBuilder {
+        this.description = description
+        return this
+    }
+
+
+    infix fun type(type: GraphQLInputType): GQLArgumentBuilder {
+        this.type = type
+        return this
+    }
+
+    infix fun defaultValue(defaultValue: Any): GQLArgumentBuilder {
+        this.defaultValue = defaultValue
+        return this
+    }
+
+    fun build(): GraphQLArgument {
+        return GraphQLArgument(name, description, type, defaultValue)
+    }
+}
+

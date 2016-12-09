@@ -55,23 +55,14 @@ object StarWarsSchema {
 
     var queryType = newObject("QueryType")
             .field("hero"..characterInterface
-                    argument(newArgument()
-                            .name("episode")
-                            .description("If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.")
-                            .type(episodeEnum))
-                    dataFetcher(StaticDataFetcher(StarWarsData.artoo)))
+                    argument (+"episode"..episodeEnum description "If omitted, returns the hero of the whole saga. If provided, returns the hero of that particular episode.")
+                    dataFetcher (StaticDataFetcher(StarWarsData.artoo)))
             .field("human"..humanType
-                    argument(newArgument()
-                            .name("id")
-                            .description("id of the human")
-                            .type(GraphQLNonNull(GraphQLString)))
-                    dataFetcher(StarWarsData.humanDataFetcher))
+                    argument (+"id"..!GraphQLString description "id of the human" )
+                    dataFetcher (StarWarsData.humanDataFetcher))
             .field("droid"..droidType
-                    argument(newArgument()
-                            .name("id")
-                            .description("id of the droid")
-                            .type(!GraphQLString))
-                    dataFetcher(StarWarsData.droidDataFetcher))
+                    argument (+"id"..!GraphQLString description "id of the droid")
+                    dataFetcher (StarWarsData.droidDataFetcher))
 
 
     var starWarsSchema = newGraphQLSchema(query = queryType).build()
