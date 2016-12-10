@@ -55,96 +55,71 @@ class StartWarsQueryTest : BehaviorSpec() {
                 }
             }
         }
+        given("the query 3") {
+            val query = """
+                       query NestedQuery {
+                           hero {
+                               name
+                               friends {
+                                   name
+                                   appearsIn
+                                   friends {
+                                       name
+                                   }
+                               }
+                           }
+                       }
+                    """
+            val expected = mapOf(
+                    "hero" to mapOf("name" to "R2-D2",
+                            "friends" to listOf(
+                                    mapOf(
+                                            "name" to
+                                                    "Luke Skywalker",
+                                            "appearsIn" to listOf("NEWHOPE", "EMPIRE", "JEDI"),
+                                            "friends" to listOf(
+                                                    mapOf("name" to "Han Solo"),
+                                                    mapOf("name" to "Leia Organa"),
+                                                    mapOf("name" to "C-3PO"),
+                                                    mapOf("name" to "R2-D2")
+                                            )
+                                    ),
+                                    mapOf(
+                                            "name" to "Han Solo",
+                                            "appearsIn" to listOf("NEWHOPE", "EMPIRE", "JEDI"),
+                                            "friends" to listOf(
+                                                    mapOf("name" to "Luke Skywalker"),
+                                                    mapOf("name" to "Leia Organa"),
+                                                    mapOf("name" to "R2-D2")
+                                            )
+                                    ),
+                                    mapOf(
+                                            "name" to "Leia Organa",
+                                            "appearsIn" to listOf("NEWHOPE", "EMPIRE", "JEDI"),
+                                            "friends" to listOf(
+                                                    mapOf("name" to "Luke Skywalker"),
+                                                    mapOf("name" to "Han Solo"),
+                                                    mapOf("name" to "C-3PO"),
+                                                    mapOf("name" to "R2-D2")
+                                            )
+                                    )
+                            )
+                    )
+            )
+
+            //val expected = mapOf("hero" to mapOf("name" to "R2-D2"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to query for the friends of friends of R2-D2") {
+                    result.toString() shouldBe expected.toString() //"{hero={name=R2-D2, friends=[{name=Luke Skywalker, appearsIn=[NEWHOPE, EMPIRE, JEDI], friends=[{name=Han Solo}, {name=Leia Organa}, {name=C-3PO}, {name=R2-D2}]}, {name=Han Solo, appearsIn=[NEWHOPE, EMPIRE, JEDI], friends=[{name=Luke Skywalker}, {name=Leia Organa}, {name=R2-D2}]}, {name=Leia Organa, appearsIn=[NEWHOPE, EMPIRE, JEDI], friends=[{name=Luke Skywalker}, {name=Han Solo}, {name=C-3PO}, {name=R2-D2}]}]}}"
+                }
+            }
+        }
 
     }
 }
 
 /*
-
-    def 'Allows us to query for the friends of friends of R2-D2'() {
-        given:
-
-        def query = """
-        query NestedQuery {
-            hero {
-                name
-                friends {
-                    name
-                    appearsIn
-                    friends {
-                        name
-                    }
-                }
-            }
-        }
-        """
-        def expected = [
-                hero: [name   : 'R2-D2',
-                       friends: [
-                               [
-                                       name     :
-                                               'Luke Skywalker',
-                                       appearsIn: ['NEWHOPE', 'EMPIRE', 'JEDI'],
-                                       friends  : [
-                                               [
-                                                       name: 'Han Solo',
-                                               ],
-                                               [
-                                                       name: 'Leia Organa',
-                                               ],
-                                               [
-                                                       name: 'C-3PO',
-                                               ],
-                                               [
-                                                       name: 'R2-D2',
-                                               ],
-                                       ]
-                               ],
-                               [
-                                       name     : 'Han Solo',
-                                       appearsIn: ['NEWHOPE', 'EMPIRE', 'JEDI'],
-                                       friends  : [
-                                               [
-                                                       name: 'Luke Skywalker',
-                                               ],
-                                               [
-                                                       name: 'Leia Organa',
-                                               ],
-                                               [
-                                                       name: 'R2-D2',
-                                               ],
-                                       ]
-                               ],
-                               [
-                                       name     : 'Leia Organa',
-                                       appearsIn: ['NEWHOPE', 'EMPIRE', 'JEDI'],
-                                       friends  : [
-                                               [
-                                                       name: 'Luke Skywalker',
-                                               ],
-                                               [
-                                                       name: 'Han Solo',
-                                               ],
-                                               [
-                                                       name: 'C-3PO',
-                                               ],
-                                               [
-                                                       name: 'R2-D2',
-                                               ],
-                                       ]
-                               ],
-                       ]
-                ]
-        ]
-
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
-
-
-    }
 
     def 'Allows us to query for Luke Skywalker directly, using his ID'() {
         given:
