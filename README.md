@@ -2,7 +2,7 @@
 [![](https://jitpack.io/v/beyondeye/graphkool.svg)](https://jitpack.io/#beyondeye/graphkool)
 [![Build Status](https://travis-ci.org/beyondeye/graphkool.svg?branch=master)](https://travis-ci.org/beyondeye/graphkool)
 [![Slack channel](https://img.shields.io/badge/Chat-Slack-green.svg)](https://kotlinlang.slack.com/messages/graphkool/)
-# graphkool: a port of GraphQl server for Kotlin
+# graphkool:  GraphQl java utilities for Kotlin
 Some notable features:
 
  
