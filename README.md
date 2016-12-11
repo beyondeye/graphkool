@@ -249,6 +249,17 @@ object StarWarsSchema {
     var starWarsSchema = newGraphQLSchema(query = queryType).build()
 }
 ```
+Notice that the syntax for the name and type definition for `field` and `argument` is slightly different:
+
+```kotlin
+.field("name"..GraphQLString)
+```
+and
+```kotlin
+.argument(+"id"..!GraphQLString)
+```
+Notice the `+` added for argument definition syntax?
+Also notice that for defining a field/argument as non-nullable with prefix the type name with `!`
 
 <a name="opensource"></a>
 ## Open source library included/modified or that inspired GraphKool
