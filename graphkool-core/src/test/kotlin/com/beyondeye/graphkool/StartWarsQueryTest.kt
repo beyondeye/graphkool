@@ -116,224 +116,170 @@ class StartWarsQueryTest : BehaviorSpec() {
             }
         }
 
-    }
-}
-
-/*
-
-    def 'Allows us to query for Luke Skywalker directly, using his ID'() {
-        given:
-        def query = """
-        query FetchLukeQuery {
-            human(id: "1000") {
-                name
-            }
-        }
-        """
-        def expected = [
-                human: [
-                        name: 'Luke Skywalker'
-                ]
-        ]
-
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
-    }
-
-    def 'Allows us to create a generic query, then use it to fetch Luke Skywalker using his ID'() {
-        given:
-        def query = """
-        query FetchSomeIDQuery(\$someId: String!) {
-            human(id: \$someId) {
-                name
-            }
-        }
-        """
-        def params = [
-                someId: '1000'
-        ]
-        def expected = [
-                human: [
-                        name: 'Luke Skywalker'
-                ]
-        ]
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query, null, params).data
-
-        then:
-        result == expected
-    }
-
-    def 'Allows us to create a generic query, then pass an invalid ID to get null back'() {
-        given:
-        def query = """
-        query humanQuery(\$id: String!) {
-            human(id: \$id) {
-                name
-            }
-        }
-        """
-        def params = [
-                id: 'not a valid id'
-        ]
-        def expected = [
-                human: null
-        ]
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query, null, params).data
-
-        then:
-        result == expected
-    }
-
-
-    def 'Allows us to query for Luke, changing his key with an alias'() {
-        given:
-        def query = """
-            query FetchLukeAliased {
-                luke: human(id: "1000") {
-                    name
+        given("the query 4") {
+            val query = """
+                       query FetchLukeQuery {
+                           human(id: "1000") {
+                               name
+                           }
+                       }
+                    """
+            val expected= mapOf("human" to mapOf("name" to "Luke Skywalker"))
+            //val expected = mapOf("hero" to mapOf("name" to "R2-D2"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to query for Luke Skywalker directly, using his ID") {
+                    result.toString() shouldBe expected.toString()
                 }
             }
-        """
-        def expected = [
-                luke: [
-                        name: 'Luke Skywalker'
-                ],
-        ]
-
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
-    }
-
-    def 'Allows us to query for both Luke and Leia, using two root fields and an alias'() {
-        given:
-
-        def query = """
-        query FetchLukeAndLeiaAliased {
-            luke:
-            human(id: "1000") {
-                name
-            }
-            leia:
-            human(id: "1003") {
-                name
+        }
+        given("the query 5") {
+            val query = """
+                        query FetchSomeIDQuery(${'$'}someId: String!) {
+                            human(id: ${'$'}someId) {
+                                name
+                            }
+                        }
+                    """
+            val expected = mapOf("human" to mapOf(
+                    "name" to "Luke Skywalker"
+            ))
+            val params = mapOf(
+                    "someId" to "1000"
+            )
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query,null as Any?, params).data
+                then("Allows us to create a generic query, then use it to fetch Luke Skywalker using his ID") {
+                    result.toString() shouldBe expected.toString()
+                }
             }
         }
-        """
-        def expected = [
-                luke:
-                        [
-                                name: 'Luke Skywalker'
-                        ],
-                leia:
-                        [
-                                name: 'Leia Organa'
-                        ]
-        ]
-
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
-
-    }
-
-    def 'Allows us to query using duplicated content'() {
-        given:
-        def query = """
-        query DuplicateFields {
-            luke: human(id: "1000") {
-                name
-                homePlanet
-            }
-            leia: human(id: "1003") {
-                name
-                homePlanet
+        given("the query 6") {
+            val query = """
+                         query humanQuery(${'$'}id: String!) {
+                             human(id: ${'$'}id) {
+                                 name
+                             }
+                         }
+                    """
+            val expected = mapOf("human" to null)
+            val params= mapOf("id" to "not a valid id")
+            //val expected = mapOf("hero" to mapOf("name" to "R2-D2"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query,null as Any?, params).data
+                then("Allows us to create a generic query, then pass an invalid ID to get null back") {
+                    result.toString() shouldBe expected.toString()
+                }
             }
         }
-        """
-        def expected = [
-                luke: [name      : 'Luke Skywalker',
-                       homePlanet:
-                               'Tatooine'
-                ],
-                leia: [name      : 'Leia Organa',
-                       homePlanet:
-                               'Alderaan'
-                ]
-        ];
-
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
-
-    }
-
-    def 'Allows us to use a fragment to avoid duplicating content'() {
-        given:
-        def query = """
-        query UseFragment {
-            luke: human(id: "1000") {
-                ...HumanFragment
-            }
-            leia: human(id: "1003") {
-                ...HumanFragment
+        given("the query 7") {
+            val query = """
+                              query FetchLukeAliased {
+                                  luke: human(id: "1000") {
+                                      name
+                                  }
+                              }
+                    """
+            val expected = mapOf("luke" to mapOf("name" to "Luke Skywalker"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to query for Luke, changing his key with an alias") {
+                    result.toString() shouldBe expected.toString()
+                }
             }
         }
-        fragment HumanFragment on Human {
-            name
-            homePlanet
-        }
-        """
-        def expected = [
-                luke: [
-                        name      : 'Luke Skywalker',
-                        homePlanet: 'Tatooine'
-                ],
-                leia: [
-                        name      : 'Leia Organa',
-                        homePlanet: 'Alderaan'
-                ]
-        ];
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
-    }
-
-    def 'Allows us to verify that R2-D2 is a droid'() {
-        given:
-        def query = """
-        query CheckTypeOfR2 {
-            hero {
-                __typename
-                name
+        given("the query 8") {
+            val query = """
+                        query FetchLukeAndLeiaAliased {
+                            luke:
+                            human(id: "1000") {
+                                name
+                            }
+                            leia:
+                            human(id: "1003") {
+                                name
+                            }
+                        }
+                    """
+            val expected = mapOf(
+                    "luke" to mapOf("name" to "Luke Skywalker"),
+                    "leia" to mapOf("name" to "Leia Organa"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to query for both Luke and Leia, using two root fields and an alias") {
+                    result.toString() shouldBe expected.toString()
+                }
             }
         }
-        """
-        def expected = [
-                hero: [
-                        __typename: 'Droid',
-                        name      : 'R2-D2'
-                ],
-        ]
-        when:
-        def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
-
-        then:
-        result == expected
+        given("the query 9") {
+            val query = """
+                          query DuplicateFields {
+                              luke: human(id: "1000") {
+                                  name
+                                  homePlanet
+                              }
+                              leia: human(id: "1003") {
+                                  name
+                                  homePlanet
+                              }
+                          }
+                    """
+            val expected = mapOf(
+                    "luke" to mapOf("name" to "Luke Skywalker",
+                            "homePlanet" to "Tatooine"),
+                    "leia" to mapOf("name" to "Leia Organa",
+                            "homePlanet" to "Alderaan"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to query using duplicated content") {
+                    result.toString() shouldBe expected.toString()
+                }
+            }
+        }
+        given("the query 10") {
+            val query = """
+                          query UseFragment {
+                             luke: human(id: "1000") {
+                                 ...HumanFragment
+                             }
+                             leia: human(id: "1003") {
+                                 ...HumanFragment
+                             }
+                         }
+                         fragment HumanFragment on Human {
+                             name
+                             homePlanet
+                         }
+                    """
+            val expected = mapOf(
+                    "luke" to mapOf("name" to "Luke Skywalker",
+                            "homePlanet" to "Tatooine"),
+                    "leia" to mapOf("name" to "Leia Organa",
+                            "homePlanet" to "Alderaan"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to use a fragment to avoid duplicating content") {
+                    result.toString() shouldBe expected.toString()
+                }
+            }
+        }
+        given("the query 11") {
+            val query = """
+                          query CheckTypeOfR2 {
+                             hero {
+                                 __typename
+                                 name
+                             }
+                         }
+                    """
+            val expected = mapOf("hero" to mapOf("__typename" to "Droid",
+                    "name" to "R2-D2"))
+            `when`("run the query") {
+                val  result = GraphQL(StarWarsSchema.starWarsSchema).execute(query).data
+                then("Allows us to verify that R2-D2 is a droid") {
+                    result.toString() shouldBe expected.toString()
+                }
+            }
+        }
     }
 }
-
- */
