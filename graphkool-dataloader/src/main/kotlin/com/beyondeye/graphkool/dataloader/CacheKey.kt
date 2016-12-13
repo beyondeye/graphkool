@@ -14,23 +14,23 @@
  * You may elect to redistribute this code under either of these licenses.
  */
 
-package com.beyondeye.graphkool.dataloader;
+package com.beyondeye.graphkool.dataloader
 
 /**
- * Function that is invoked on input keys of type {@code K} to derive keys that are required by the {@link CacheMap}
+ * Function that is invoked on input keys of type `K` to derive keys that are required by the [CacheMap]
  * implementation.
- *
  * @param <K>   type parameter indicating the type of the input key
- * @author <a href="https://github.com/aschrijver/">Arnold Schrijver</a>
- */
+ * *
+ * @author [Arnold Schrijver](https://github.com/aschrijver/)
+</K> */
 @FunctionalInterface
-public interface CacheKey<K> {
+interface CacheKey<K: Any> {
 
     /**
      * Returns the cache key that is created from the provided input key.
-     *
      * @param input the input key
+     * *
      * @return the cache key
      */
-    Object getKey(K input);
+    fun getKey(input: K): Any
 }

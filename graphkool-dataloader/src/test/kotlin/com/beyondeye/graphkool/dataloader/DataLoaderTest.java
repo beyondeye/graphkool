@@ -479,7 +479,7 @@ public class DataLoaderTest {
     public void should_Disable_caching() {
         ArrayList<Collection> loadCalls = new ArrayList<>();
         DataLoader<String, String> identityLoader =
-                idLoader(DataLoaderOptions.create().setCachingEnabled(false), loadCalls);
+                idLoader(DataLoaderOptions.Companion.create().setCachingEnabled(false), loadCalls);
 
         Future<String> future1 = identityLoader.load("A");
         Future<String> future2 = identityLoader.load("B");
@@ -517,7 +517,7 @@ public class DataLoaderTest {
     @Test
     public void should_Accept_objects_with_a_complex_key() {
         ArrayList<Collection> loadCalls = new ArrayList<>();
-        DataLoaderOptions options = DataLoaderOptions.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
+        DataLoaderOptions options = DataLoaderOptions.Companion.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
         DataLoader<JsonObject, Integer> identityLoader = idLoader(options, loadCalls);
 
         JsonObject key1 = new JsonObject().put("id", 123);
@@ -536,7 +536,7 @@ public class DataLoaderTest {
     @Test
     public void should_Clear_objects_with_complex_key() {
         ArrayList<Collection> loadCalls = new ArrayList<>();
-        DataLoaderOptions options = DataLoaderOptions.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
+        DataLoaderOptions options = DataLoaderOptions.Companion.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
         DataLoader<JsonObject, Integer> identityLoader = idLoader(options, loadCalls);
 
         JsonObject key1 = new JsonObject().put("id", 123);
@@ -560,7 +560,7 @@ public class DataLoaderTest {
     @Test
     public void should_Accept_objects_with_different_order_of_keys() {
         ArrayList<Collection> loadCalls = new ArrayList<>();
-        DataLoaderOptions options = DataLoaderOptions.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
+        DataLoaderOptions options = DataLoaderOptions.Companion.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
         DataLoader<JsonObject, Integer> identityLoader = idLoader(options, loadCalls);
 
         JsonObject key1 = new JsonObject().put("a", 123).put("b", 321);
@@ -582,7 +582,7 @@ public class DataLoaderTest {
     @Test
     public void should_Allow_priming_the_cache_with_an_object_key() {
         ArrayList<Collection> loadCalls = new ArrayList<>();
-        DataLoaderOptions options = DataLoaderOptions.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
+        DataLoaderOptions options = DataLoaderOptions.Companion.create().setCacheKeyFunction(getJsonObjectCacheMapFn());
         DataLoader<JsonObject, JsonObject> identityLoader = idLoader(options, loadCalls);
 
         JsonObject key1 = new JsonObject().put("id", 123);
@@ -604,7 +604,7 @@ public class DataLoaderTest {
     public void should_Accept_a_custom_cache_map_implementation() {
         CustomCacheMap customMap = new CustomCacheMap();
         ArrayList<Collection> loadCalls = new ArrayList<>();
-        DataLoaderOptions options = DataLoaderOptions.create().setCacheMap(customMap);
+        DataLoaderOptions options = DataLoaderOptions.Companion.create().setCacheMap(customMap);
         DataLoader<String, String> identityLoader = idLoader(options, loadCalls);
 
         // Fetches as expected
@@ -656,7 +656,7 @@ public class DataLoaderTest {
     @Test
     public void should_Batch_loads_occurring_within_futures() {
         ArrayList<Collection> loadCalls = new ArrayList<>();
-        DataLoader<String, String> identityLoader = idLoader(DataLoaderOptions.create(), loadCalls);
+        DataLoader<String, String> identityLoader = idLoader(DataLoaderOptions.Companion.create(), loadCalls);
 
         Future.<String>future().setHandler(rh -> {
             identityLoader.load("a");

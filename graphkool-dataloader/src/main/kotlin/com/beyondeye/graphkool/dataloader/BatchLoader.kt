@@ -14,28 +14,26 @@
  * You may elect to redistribute this code under either of these licenses.
  */
 
-package com.beyondeye.graphkool.dataloader;
+package com.beyondeye.graphkool.dataloader
 
-import io.vertx.core.CompositeFuture;
-
-import java.util.Collection;
+import io.vertx.core.CompositeFuture
 
 /**
  * Function that is invoked for batch loading the list of data values indicated by the provided list of keys. The
- * function returns a {@link CompositeFuture} to aggregate results of individual load requests.
- *
+ * function returns a [CompositeFuture] to aggregate results of individual load requests.
  * @param <K> type parameter indicating the type of keys to use for data load requests.
- *
- * @author <a href="https://github.com/aschrijver/">Arnold Schrijver</a>
- */
+ * *
+ * *
+ * @author [Arnold Schrijver](https://github.com/aschrijver/)
+</K> */
 @FunctionalInterface
-public interface BatchLoader<K> {
+interface BatchLoader<K> {
 
     /**
      * Batch load the provided keys and return a composite future of the result.
-     *
      * @param keys the list of keys to load
+     * *
      * @return the composite future
      */
-    CompositeFuture load(Collection<K> keys);
+    fun load(keys: Collection<K>): CompositeFuture
 }
