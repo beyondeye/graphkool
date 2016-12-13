@@ -1,1 +1,2 @@
 include ':graphkool-core'
+include ':graphkool-dataloader'

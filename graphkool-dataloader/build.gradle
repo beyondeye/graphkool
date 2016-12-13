@@ -1,0 +1,12 @@
+dependencies {
+   compile project(':graphkool-core')
+   compile "io.vertx:vertx-core:$vertx_version"
+   compileOnly "io.vertx:vertx-docgen:$vertx_version"
+	//compile "com.graphql-java:graphql-java:$graphqljava_version"
+	//    compile "com.graphql-java:graphql-java-annotations:0.13.1"
+   testCompile 'org.awaitility:awaitility:2.0.0'
+   testCompile "io.vertx:vertx-unit:$vertx_version"
+}
+
+apply from: '../maven-push-javalib.gradle'
+
